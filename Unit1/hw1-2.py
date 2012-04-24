@@ -37,24 +37,38 @@ def best_wild_hand(hand):
     maxrank, best_hand = None,None
     for i in range(len(five_hands_list)):
         five_hand = five_hands_list[i]
-        if '?B' in five_hand:
+        if '?B' in five_hand and '?R' in five_hand:
+            index_black = five_hand.index('?B')
+            index_red = five_hand.index('?R')
+            for black_joker in black_joker_combinations:
+                five_hand[index_black] = black_joker
+                for red_joker in red_joker_combinations:
+                    five_hand[index_red] = red_joker
+                    rank = hand_rank(five_hand)
+                    if rank > maxrank:
+                        maxrank = rank
+                        best_hand = [a for a in five_hand]
+        elif '?B' in five_hand:
             index = five_hand.index('?B')
             for black_joker in black_joker_combinations:
                 five_hand[index] = black_joker
                 rank = hand_rank(five_hand)
                 if rank > maxrank:
-                    maxrank, best_hand = rank, five_hand
+                    maxrank = rank
+                    best_hand = [a for a in five_hand]
         elif '?R' in five_hand:
             index = five_hand.index('?R')
             for red_joker in red_joker_combinations:
                 five_hand[index] = red_joker
                 rank = hand_rank(five_hand)
                 if rank > maxrank:
-                    maxrank, best_hand = rank, five_hand
+                    maxrank = rank
+                    best_hand = [a for a in five_hand]
         else:
             rank = hand_rank(five_hand)
             if rank > maxrank:
-                maxrank, best_hand = rank, five_hand
+                maxrank = rank
+                best_hand = [a for a in five_hand]
     return best_hand
 
 def test_best_wild_hand():
@@ -129,5 +143,5 @@ def two_pair(ranks):
     else:
         return None 
 
-print sorted(best_wild_hand("6C 7C 8C 9C TC 5C ?B".split()))
+
 print test_best_wild_hand()
